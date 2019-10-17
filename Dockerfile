@@ -12,6 +12,4 @@ COPY ${DEPENDENCY}/META-INF /app/META-INF
 
 COPY ${DEPENDENCY}/BOOT-INF/classes /app
 
-EXPOSE 9092
-
 ENTRYPOINT [ "java", "-cp","app:app/lib/*", "br.com.jackson.ServiceApplication" ]

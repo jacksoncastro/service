@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # annotations:
+  #   prometheus.io/path: /api
+  #   prometheus.io/port: "8080"
+  #   prometheus.io/scrape: "true"
+  labels:
+    app: speedup
+  name: speedup
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: speedup
+  template:
+    metadata:
+      labels:
+        app: speedup
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - image: jackvasc/speedup
+        name: speedup
+        ports:
+        - containerPort: 8080
+          name: speedup
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: speedup
+  name: speedup
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "speedup-service"
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: speedup
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: speedup
+  name: speedup
+spec:
+  selector:
+    matchLabels:
+      app: speedup
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: web
+    interval: 30s
