@@ -1,58 +1,202 @@
+### Service 01
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  # annotations:
-  #   prometheus.io/path: /api
-  #   prometheus.io/port: "8080"
-  #   prometheus.io/scrape: "true"
+  annotations:
+    prometheus.io/path: /api
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
   labels:
-    app: speedup
-  name: speedup
+    group: speedup
+    app: service01
+  name: service01
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: speedup
+      app: service01
   template:
     metadata:
       labels:
-        app: speedup
+        app: service01
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
       containers:
       - image: jackvasc/speedup
-        name: speedup
+        name: service01
         ports:
         - containerPort: 8080
-          name: speedup
+          name: service01
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: speedup
-  name: speedup
+    group: speedup
+    app: service01
+  name: service01
 spec:
   type: LoadBalancer
   ports:
-  - name: "speedup-service"
-    port: 8080
+  - name: "speedup-service01"
+    port: 8081
     targetPort: 8080
   selector:
-    app: speedup
+    app: service01
+---
+
+### Service 02
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    group: speedup
+    app: service02
+  name: service02
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service02
+  template:
+    metadata:
+      labels:
+        app: service02
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - image: jackvasc/speedup
+        name: service02
+        ports:
+        - containerPort: 8080
+          name: service02
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    group: speedup
+    app: service02
+  name: service02
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "speedup-service02"
+    port: 8082
+    targetPort: 8080
+  selector:
+    app: service02
+
+---
+
+### Service 03
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    group: speedup
+    app: service03
+  name: service03
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service03
+  template:
+    metadata:
+      labels:
+        app: service03
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - image: jackvasc/speedup
+        name: service03
+        ports:
+        - containerPort: 8080
+          name: service03
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    group: speedup
+    app: service03
+  name: service03
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "speedup-service03"
+    port: 8083
+    targetPort: 8080
+  selector:
+    app: service03
+
+---
+    
+### Service 04
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    group: speedup
+    app: service04
+  name: service04
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service04
+  template:
+    metadata:
+      labels:
+        app: service04
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - image: jackvasc/speedup
+        name: service04
+        ports:
+        - containerPort: 8080
+          name: service04
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    group: speedup
+    app: service04
+  name: service04
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "speedup-service04"
+    port: 8084
+    targetPort: 8080
+  selector:
+    app: service04
+
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    app: speedup
+    group: speedup
   name: speedup
 spec:
   selector:
     matchLabels:
-      app: speedup
+      group: speedup
   namespaceSelector:
     matchNames:
     - default
