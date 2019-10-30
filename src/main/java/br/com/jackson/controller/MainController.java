@@ -1,12 +1,11 @@
 package br.com.jackson.controller;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,27 +22,31 @@ public class MainController {
 	@Autowired
 	private RestTemplateBuilder restTemplateBuilder;
 
-
+	// ingress controller nginx
 	@PostMapping
 	public ResponseEntity<?> action(@RequestBody List<DataVO> datas) {
 
 		if (datas != null && !datas.isEmpty()) {
-
-			DataVO firstData = datas.remove(0);
-
-			System.out.printf("Serviço %s com sleep %d\n", firstData.getNext(), firstData.getSleep());
-
-			sleep(firstData.getSleep());
-
-			if (datas.size() > 0) {
-				RestTemplate restTemplate = getRestTemplate(firstData.getTimeout());
-			    HttpHeaders headers = new HttpHeaders();
-			    headers.setContentType(MediaType.APPLICATION_JSON);
-			    restTemplate.postForEntity(datas.get(0).getNext(), datas, String.class);
-			}
+			datas.forEach(this::call);
 		}
 
 		return ResponseEntity.ok().build();
+	}
+
+
+	public void call(DataVO data) {
+
+		// sleep
+		sleep(data.getSleep());
+
+		if (data.getService() != null && !data.getService().trim().isEmpty()) {
+			if (data.getNext() == null) {
+				data.setNext(Collections.emptySet());
+			}
+			// timeout
+			RestTemplate restTemplate = getRestTemplate(data.getTimeout());
+			restTemplate.postForEntity(data.getService(), data.getNext(), String.class);
+		}
 	}
 
 
@@ -66,7 +69,7 @@ public class MainController {
 		Duration duration = Duration.ofMillis(timeout);
 
 		return this.restTemplateBuilder
-					   .setConnectTimeout(duration)
+//					   .setConnectTimeout(duration)// TODO deixar default
 			           .setReadTimeout(duration)
 			           .build();
 	}
@@ -80,7 +83,10 @@ public class MainController {
 	 *
 	 * @version 1.0.0
 	 */
-	private void sleep(long sleep) {
+	private void sleep(Long sleep) {
+		if (sleep == null) {
+			return;
+		}
 		try {
 			Thread.sleep(sleep);
 		} catch (InterruptedException e) {

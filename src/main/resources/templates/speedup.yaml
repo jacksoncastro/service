@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   annotations:
     prometheus.io/path: /api
-    prometheus.io/port: "8080"
+    prometheus.io/port: "9090"
     prometheus.io/scrape: "true"
   labels:
     group: speedup
@@ -21,7 +21,7 @@ spec:
         app: service01
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        prometheus.io/port: "9090"
     spec:
       containers:
       - image: jackvasc/speedup
