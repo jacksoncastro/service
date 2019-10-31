@@ -1,0 +1,11 @@
+version: '3.2'
+services:
+    locust:
+        container_name: locust
+        build: .
+        image: jackvasc/locust
+        tty: true
+        ports:
+            - '8089:8089'
+        extra_hosts:
+          - "speedup.local.com:192.168.122.57"

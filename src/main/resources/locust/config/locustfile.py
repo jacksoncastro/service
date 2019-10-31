@@ -1,35 +1,38 @@
 from locust import HttpLocust, TaskSet, task
+import json
 
 class RestTasks(TaskSet):
 
-    payload = [
-        {
-            "service": "http://localhost:8080/api",
-            "sleep": 1000,
-            "timeout": 5000,
-            "next": [
-                {
-                    "service": "http://localhost:8080/api",
-                    "sleep": 1000,
-                    "timeout": 5000
-                }
-            ]
-        },
-        {
-            "service": "http://localhost:8080/api",
-            "sleep": 1000,
-            "timeout": 5000
-        },
-        {
-            "service": "http://localhost:8080/api",
-            "sleep": 1000,
-            "timeout": 1000
-        }
-    ]
-
     @task
     def index(self):
-        self.client.post("/service01/api", json=payload)
+        payload = [
+            {
+                "service": "http://service02.default:8080/api",
+                "sleep": 1000,
+                "timeout": 5000,
+                "next": [
+                    {
+                        "service": "http://service03.default:8080/api",
+                        "sleep": 1000,
+                        "timeout": 5000
+                    }
+                ]
+            },
+            {
+                "service": "http://service03.default:8080/api",
+                "sleep": 1000,
+                "timeout": 5000
+            },
+            {
+                "service": "http://service04.default:8080/api",
+                "sleep": 1000,
+                "timeout": 1000
+            }
+        ]
+        headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
+        self.client.post("/service01/api", data=json.dumps(payload),
+        headers=headers,
+        name = "Service 01")
 
 class WebsiteUser(HttpLocust):
     task_set = RestTasks
