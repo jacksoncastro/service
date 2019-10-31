@@ -1,22 +1,27 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: foobar-ingress
+  name: speedup-ingress
   annotations:
-    kubernetes.io/ingress.class: apigateway
-    apigateway.ingress.kubernetes.io/stage-name: prod
-    apigateway.ingress.kubernetes.io/nginx-replicas: "3"
-    apigateway.ingress.kubernetes.io/nginx-image: nginx:latest
-    apigateway.ingress.kubernetes.io/nginx-service-port: "9090"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-    - http:
-        paths:
-        - backend:
-            serviceName: service01
-            servicePort: 8080
-          path: /api
-        - backend:
-            serviceName: service02
-            servicePort: 8080
-          path: /api
+  - host: speedup.local.com
+    http:
+      paths:
+      - path: /service01(/|$)(.*)
+        backend:
+          serviceName: service01
+          servicePort: 8080
+      - path: /service02(/|$)(.*)
+        backend:
+          serviceName: service02
+          servicePort: 8080
+      - path: /service03(/|$)(.*)
+        backend:
+          serviceName: service03
+          servicePort: 8080
+      - path: /service04(/|$)(.*)
+        backend:
+          serviceName: service04
+          servicePort: 8080

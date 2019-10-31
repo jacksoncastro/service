@@ -21,3 +21,9 @@ VBoxManage controlvm k8s-master poweroff
 VBoxManage controlvm k8s-node01 poweroff
 VBoxManage controlvm k8s-node02 poweroff
 ```
+
+### Ingress
+
+```bash
+kubectl delete --ignore-not-found=true -f ingress.yaml && kubectl apply -f ingress.yaml
+```
