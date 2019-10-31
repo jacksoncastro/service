@@ -2,21 +2,34 @@ from locust import HttpLocust, TaskSet, task
 
 class RestTasks(TaskSet):
 
+    payload = [
+        {
+            "service": "http://localhost:8080/api",
+            "sleep": 1000,
+            "timeout": 5000,
+            "next": [
+                {
+                    "service": "http://localhost:8080/api",
+                    "sleep": 1000,
+                    "timeout": 5000
+                }
+            ]
+        },
+        {
+            "service": "http://localhost:8080/api",
+            "sleep": 1000,
+            "timeout": 5000
+        },
+        {
+            "service": "http://localhost:8080/api",
+            "sleep": 1000,
+            "timeout": 1000
+        }
+    ]
+
     @task
     def index(self):
-    	# rest
-        self.client.get("/api/rest/veiculos") # Lista veiculos
-        self.client.get("/api/rest/veiculo/NUX5555") # buscar veiculo por placa
-
-    	# restql
-        self.client.get("/api/restql/veiculos") # Lista veiculos
-        self.client.get("/api/restql/veiculo/NUX5555") # buscar veiculo por placa
-
-        # graphql
-        self.client.get("/api/graphql/veiculo") # Lista veiculos
-        self.client.get("/api/graphql/veiculo/1") # buscar veiculo por placa
-
-
+        self.client.post("/service01/api", json=payload)
 
 class WebsiteUser(HttpLocust):
     task_set = RestTasks
