@@ -64,7 +64,7 @@
 	            <artifactId>dockerfile-maven-plugin</artifactId>
 	            <version>1.4.9</version>
 	            <configuration>
-	                <repository>${project.groupId}/${project.artifactId}</repository>
+	                <repository>jackvasc/speedup</repository>
 	            </configuration>
 	        </plugin>
 

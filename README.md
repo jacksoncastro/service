@@ -7,10 +7,6 @@ mvn -DskipTests install dockerfile:build
 ```
 
 ```bash
-docker tag br.com.jackson/service:latest jackvasc/speedup:latest
-```
-
-```bash
 docker push jackvasc/speedup:latest
 ```
 
@@ -22,30 +18,17 @@ kubectl delete all -l group=speedup && kubectl apply -f speedup.yaml
 kubectl port-forward -n monitoring prometheus-prometheus-operator-prometheus-0 9090
 ```
 
-
+### Exemplo de json
 ```json
 [
     {
-        "service": "http://localhost:8080/api",
-        "sleep": 1000,
-        "timeout": 5000,
+        "timeout": 10000,
         "next": [
-            {
-                "service": "http://localhost:8080/api",
-                "sleep": 1000,
-                "timeout": 5000
-            }
+        	{
+        		"service": "http://service02.default:8080/api",
+        		"timeout": 10000
+        	}
         ]
-    },
-    {
-        "service": "http://localhost:8080/api",
-        "sleep": 1000,
-        "timeout": 5000
-    },
-    {
-        "service": "http://localhost:8080/api",
-        "sleep": 1000,
-        "timeout": 1000
     }
 ]
 ```

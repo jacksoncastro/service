@@ -5,34 +5,57 @@ class RestTasks(TaskSet):
 
     @task
     def index(self):
-        payload = [
+        # -------------
+        payload01 = [
             {
-                "service": "http://service02.default:8080/api",
-                "sleep": 1000,
-                "timeout": 5000,
+                "timeout": 7500,
                 "next": [
                     {
-                        "service": "http://service03.default:8080/api",
-                        "sleep": 1000,
-                        "timeout": 5000
+                    	"service": "http://service04.default:8080/api",
+                        "timeout": 5500
                     }
                 ]
-            },
-            {
-                "service": "http://service03.default:8080/api",
-                "sleep": 1000,
-                "timeout": 5000
-            },
-            {
-                "service": "http://service04.default:8080/api",
-                "sleep": 1000,
-                "timeout": 1000
             }
         ]
         headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
-        self.client.post("/service01/api", data=json.dumps(payload),
+        self.client.post("/service01/api", data=json.dumps(payload01),
         headers=headers,
-        name = "Service 01")
+        name = "Flow 01")
+
+        # -------------
+        payload02 = [
+            {
+                "timeout": 7500,
+                "next": [
+                    {
+                		"service": "http://service04.default:8080/api",
+                        "timeout": 5500
+                    }
+                ]
+            }
+        ]
+        headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
+        self.client.post("/service02/api", data=json.dumps(payload02),
+        headers=headers,
+        name = "Flow 02")
+
+        # -------------
+        payload03 = [
+            {
+                "timeout": 7500,
+                "next": [
+                    {
+                		"service": "http://service04.default:8080/api",
+                        "timeout": 5500
+                    }
+                ]
+            }
+        ]
+        headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
+        self.client.post("/service03/api", data=json.dumps(payload03),
+        headers=headers,
+        name = "Flow 03")
+
 
 class WebsiteUser(HttpLocust):
     task_set = RestTasks
