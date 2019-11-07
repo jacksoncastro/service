@@ -1,61 +1,18 @@
 from locust import HttpLocust, TaskSet, task
 import json
+import os
 
 class RestTasks(TaskSet):
 
     @task
     def index(self):
-        # -------------
-        payload01 = [
-            {
-                "timeout": 7500,
-                "next": [
-                    {
-                    	"service": "http://service04.default:8080/api",
-                        "timeout": 5500
-                    }
-                ]
-            }
-        ]
+        speedup_request = os.environ['SPEEDUP_REQUEST']
+        json_request = json.loads(speedup_request)
         headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
-        self.client.post("/service01/api", data=json.dumps(payload01),
-        headers=headers,
-        name = "Flow 01")
-
-        # -------------
-        payload02 = [
-            {
-                "timeout": 7500,
-                "next": [
-                    {
-                		"service": "http://service04.default:8080/api",
-                        "timeout": 5500
-                    }
-                ]
-            }
-        ]
-        headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
-        self.client.post("/service02/api", data=json.dumps(payload02),
-        headers=headers,
-        name = "Flow 02")
-
-        # -------------
-        payload03 = [
-            {
-                "timeout": 7500,
-                "next": [
-                    {
-                		"service": "http://service04.default:8080/api",
-                        "timeout": 5500
-                    }
-                ]
-            }
-        ]
-        headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
-        self.client.post("/service03/api", data=json.dumps(payload03),
-        headers=headers,
-        name = "Flow 03")
-
+        for request in json_request:
+	        self.client.post(request['url'], data=json.dumps(request['data']),
+	        headers=headers,
+	        name = request['name'])
 
 class WebsiteUser(HttpLocust):
     task_set = RestTasks
