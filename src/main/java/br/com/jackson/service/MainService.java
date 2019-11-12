@@ -24,7 +24,9 @@ public class MainService {
 
 	private static final long DEFAULT_SLEEP = 1000L;
 
-	private static final int DEFAULT_DEVIATION = 100;
+	private static final int DEFAULT_DEVIATION = 20;
+
+	private static final int ONE_HUNDRED = 100;
 
 	@Autowired
 	private RestTemplateBuilder restTemplateBuilder;
@@ -69,8 +71,8 @@ public class MainService {
 			}
 
 			// timeout
-			RestTemplate restTemplate = getRestTemplate(data.getTimeout());
-			restTemplate.postForEntity(data.getService(), data.getNext(), String.class);
+//			RestTemplate restTemplate = getRestTemplate(data.getTimeout());
+//			restTemplate.postForEntity(data.getService(), data.getNext(), String.class);
 		}
 	}
 
@@ -113,7 +115,12 @@ public class MainService {
 	 * @version 1.0.0
 	 */
 	private long getNormalDistribution(long average, int deviation) {
+//		deviation / average
 		return (long) (this.random.nextGaussian() * deviation + average);
+	}
+
+	private double getPercent(double value, int percent) {
+		return (value * percent) / ONE_HUNDRED;
 	}
 
 

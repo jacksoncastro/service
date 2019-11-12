@@ -8,9 +8,13 @@ import lombok.Data;
 @Data
 public class RequestVO {
 
-	private Long timeout;
+	private Double media;
+
+	private int desvio;
 
 	private String service;
+
+	private Speedup speedup;
 
 	private Set<RequestVO> next;
 
