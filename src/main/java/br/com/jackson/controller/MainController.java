@@ -1,8 +1,6 @@
 package br.com.jackson.controller;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,26 +21,20 @@ public class MainController {
 	private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
+	private HttpServletRequest request;
+
+	@Autowired
 	private MainService mainService;
 
 
 	// ingress controller nginx
 	@PostMapping
-	public ResponseEntity<?> action(@RequestBody List<RequestVO> datas) {
+	public ResponseEntity<?> action(@RequestBody RequestVO data) {
 
-		log.trace("Host requested: {}", getHost());
+		log.trace("Host requested: {}", this.request.getRequestURL());
 
-		this.mainService.speedup(datas);
+		this.mainService.speedup(data);
 
 		return ResponseEntity.ok().build();
-	}
-
-
-	private String getHost() {
-		try {
-			return InetAddress.getLocalHost().toString();
-		} catch (UnknownHostException e) {
-			return "UnknownHost" + e.getMessage();
-		}
 	}
 }

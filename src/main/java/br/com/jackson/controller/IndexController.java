@@ -1,21 +1,20 @@
 package br.com.jackson.controller;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class IndexController {
 
+	@Autowired
+	private HttpServletRequest request;
+
 
 	@RequestMapping("/")
 	public String index() {
-		try {
-			return InetAddress.getLocalHost().toString();
-		} catch (UnknownHostException e) {
-			return "UnknownHost" + e.getMessage();
-		}
+		return this.request.getRequestURL().toString();
 	}
 }

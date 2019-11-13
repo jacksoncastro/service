@@ -1,8 +1,6 @@
 package br.com.jackson.service;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -38,15 +36,15 @@ public class MainService {
     private Environment env;
 
 
-	public void speedup(List<RequestVO> datas) {
-
-		if (datas != null && !datas.isEmpty()) {
-			datas.forEach(this::call);
+	public void speedup(RequestVO requestVO) {
+		if (requestVO != null) {
+			if (requestVO.getNext() != null && !requestVO.getNext().isEmpty()) {
+				requestVO.getNext().forEach(this::next);
+			}
+			long sleep = getSleep();
+			log.trace("Sleep environment: {}", sleep);
+			sleep(sleep);
 		}
-
-		long sleep = getSleep();
-		log.trace("Sleep environment: {}", sleep);
-		sleep(sleep);
 	}
 
 
@@ -58,21 +56,14 @@ public class MainService {
 	 *
 	 * @version 1.0.0
 	 */
-	private void call(RequestVO data) {
-
-		if (data.getNext() != null && !data.getNext().isEmpty()) {
-			data.getNext().forEach(this::call);
-		}
-
-		if (data.getService() != null && !data.getService().trim().isEmpty()) {
-
-			if (data.getNext() == null) {
-				data.setNext(Collections.emptySet());
-			}
-
+	private void next(RequestVO data) {
+		String service = data.getService();
+		if (service != null && !service.trim().isEmpty()) {
+			// clear service
+			data.setService(null);
 			// timeout
-//			RestTemplate restTemplate = getRestTemplate(data.getTimeout());
-//			restTemplate.postForEntity(data.getService(), data.getNext(), String.class);
+			RestTemplate restTemplate = getRestTemplate(10000L);
+			restTemplate.postForEntity(service, data, String.class);
 		}
 	}
 
@@ -139,7 +130,7 @@ public class MainService {
 		try {
 			long normalDistribution = getNormalDistribution(sleep, DEFAULT_DEVIATION);
 			log.trace("Sleep by normal distribution: {}", normalDistribution);
-			Thread.sleep(normalDistribution);
+			Thread.sleep(0);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
