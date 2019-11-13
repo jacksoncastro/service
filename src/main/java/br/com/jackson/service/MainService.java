@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import br.com.jackson.controller.MainController;
 import br.com.jackson.vo.Environments;
 import br.com.jackson.vo.RequestVO;
+import br.com.jackson.vo.Speedup;
 
 @Service
 public class MainService {
@@ -41,7 +42,7 @@ public class MainService {
 			if (requestVO.getNext() != null && !requestVO.getNext().isEmpty()) {
 				requestVO.getNext().forEach(this::next);
 			}
-			long sleep = getSleep();
+			long sleep = calculeSleep(requestVO);
 			log.trace("Sleep environment: {}", sleep);
 			sleep(sleep);
 		}
@@ -144,8 +145,12 @@ public class MainService {
 	 * @date 2019-11-06
 	 *
 	 * @version 1.0.0
+	 * @param requestVO 
 	 */
-	private long getSleep() {
+	private long calculeSleep(RequestVO requestVO) {
+		if (requestVO.getSpeedup() == Speedup.REAL) {
+			
+		}
 		return this.env.getProperty(Environments.SERVICE_SLEEP, Long.class, DEFAULT_SLEEP);
 	}
 }
