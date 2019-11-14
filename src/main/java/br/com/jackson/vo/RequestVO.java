@@ -8,15 +8,15 @@ import lombok.Data;
 @Data
 public class RequestVO {
 
-	private int timeout;
+	private Long timeout;
 
-	private int media;
+	private Integer average;
 
-	private int desvio;
+	private Integer deviation;
 
 	private String service;
-	// TODO verificar outra forma de deixar default
-	private Speedup speedup = Speedup.NONE;
+
+	private Speedup speedup;
 
 	private Set<RequestVO> next;
 

@@ -1,7 +1,12 @@
 package br.com.jackson.vo;
 
-public enum Speedup {
+import lombok.Data;
 
-	NONE, REAL, VIRTUAL_DIRETO, VIRTUAL_INDIRETO
+@Data
+public class Speedup {
+
+	private TypeSpeedup type;
+
+	private double value;
 
 }
