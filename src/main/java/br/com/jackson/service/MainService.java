@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.uncommons.maths.random.GaussianGenerator;
 
 import br.com.jackson.controller.MainController;
 import br.com.jackson.vo.RequestVO;
@@ -114,7 +115,8 @@ public class MainService {
 	 */
 	private long getNormalDistribution(double average, int deviation) {
 		double percent = getPercent(average, deviation);
-		return (long) (this.random.nextGaussian() * percent + average);
+		GaussianGenerator generator = new GaussianGenerator(average, percent * 0.5, this.random);
+		return generator.nextValue().longValue();
 	}
 
 

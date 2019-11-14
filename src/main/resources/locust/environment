@@ -1,0 +1,2 @@
+ATTACKED_HOST=http://speedup.local.com
+LOCUST_OPTS=-c 100 -r 10

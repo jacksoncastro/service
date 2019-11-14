@@ -7,7 +7,7 @@ helm install stable/prometheus-operator --name prometheus-operator --namespace m
 ## Up and Down speedup template
 
 ```bash
-kubectl delete all -l app=speedup && kubectl apply -f speedup.yaml
+kubectl delete all -l group=speedup && kubectl apply -f speedup.yaml
 ```
 
 ```bash

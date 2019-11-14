@@ -7,9 +7,7 @@ services:
         tty: true
         ports:
             - '8089:8089'
-        environment:
-          - ATTACKED_HOST=${ATTACKED_HOST}
-          - LOCUST_OPTS=${LOCUST_OPTS}
-          - SPEEDUP_REQUEST=${SPEEDUP_REQUEST}
+        env_file:
+          - environment
         extra_hosts:
           - "speedup.local.com:192.168.122.57"

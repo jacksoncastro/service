@@ -1,12 +1,11 @@
 from locust import HttpLocust, TaskSet, task
 import json
-import os
 
 class RestTasks(TaskSet):
 
     @task
     def index(self):
-        speedup_request = os.environ['SPEEDUP_REQUEST']
+        speedup_request = open('request.json').read()
         json_request = json.loads(speedup_request)
         headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
         for request in json_request:
