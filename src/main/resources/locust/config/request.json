@@ -7,7 +7,7 @@
             "deviation": 10,
             "next": [
                 {
-                    "service": "http://service04.default:8080/api",
+                    "service": "http://speedup.local.com/service04/api",
                     "average":4000,
                     "deviation": 10
                 }
@@ -22,7 +22,7 @@
             "deviation": 10,
             "next": [
                 {
-                    "service": "http://service04.default:8080/api",
+                    "service": "http://speedup.local.com/service04/api",
                     "average": 4000,
                     "deviation": 10
                 }
@@ -37,7 +37,7 @@
             "deviation": 10,
             "next": [
                 {
-                    "service": "http://service04.default:8080/api",
+                    "service": "http://speedup.local.com/service04/api",
                     "average": 4000,
                     "deviation": 10
                 }
