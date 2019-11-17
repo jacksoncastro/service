@@ -271,7 +271,7 @@ public class MainService {
 		int distribution = (int) getNormalDistribution(average, deviation);
 
 		double value = request.getSpeedup().getValue();
-		double percent = getPercent(distribution, value);
+		double percent = getPercent(average, value);
 
 		return (long) (distribution + percent);
 	}
