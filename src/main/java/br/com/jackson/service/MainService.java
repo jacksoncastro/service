@@ -1,7 +1,11 @@
 package br.com.jackson.service;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +39,9 @@ public class MainService {
 	@Autowired
 	private Random random;
 
+	@Autowired
+	private ExecutorService executorService;
+
 
 	/**
 	 * Process a request object
@@ -45,9 +52,20 @@ public class MainService {
 	 * @version 1.0.0
 	 */
 	public void speedup(RequestVO requestVO) {
+
 		if (requestVO != null) {
 			if (requestVO.getNext() != null && !requestVO.getNext().isEmpty()) {
-				requestVO.getNext().forEach(this::next);
+
+				List<Callable<Void>> callables = requestVO.getNext()
+														  	.stream()
+														  	.map(this::next)
+														  	.collect(Collectors.toList());
+
+				try {
+					this.executorService.invokeAll(callables);
+				} catch (InterruptedException e) {
+					throw new RuntimeException("Error to invoke all.", e);
+				}
 			}
 			long sleep = calculateSleep(requestVO);
 			log.trace("Sleeping {} milliseconds", sleep);
@@ -63,16 +81,25 @@ public class MainService {
 	 * @date 2019-11-03
 	 *
 	 * @version 1.0.0
+	 * @return 
 	 */
-	private void next(RequestVO data) {
+	private Callable<Void> next(RequestVO data) {
+
 		String service = data.getService();
 		if (service != null && !service.trim().isEmpty()) {
+			Long timeout = data.getTimeout();
+
 			// clear service
 			data.setService(null);
+			data.setTimeout(null);
+
 			// request next service
-			RestTemplate restTemplate = getRestTemplate(data.getTimeout());
-			restTemplate.postForEntity(service, data, String.class);
+			return asyncRequest(service, data, timeout);
+
+//			RestTemplate restTemplate = getRestTemplate(timeout);
+//			restTemplate.postForEntity(service, data, String.class);
 		}
+		return null;
 	}
 
 
@@ -98,6 +125,16 @@ public class MainService {
 			           .setReadTimeout(duration)
 			           .build();
 	}
+
+
+    public Callable<Void> asyncRequest(String url, RequestVO data, Long timeout) {
+		return () -> {
+			// request next service
+			RestTemplate restTemplate = getRestTemplate(timeout);
+			restTemplate.postForEntity(url, data, String.class);
+			return null;
+		};
+    }
 
 
 	/**
