@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.uncommons.maths.random.GaussianGenerator;
 import br.com.jackson.controller.MainController;
 import br.com.jackson.vo.RequestVO;
 import br.com.jackson.vo.Speedup;
+import br.com.jackson.vo.TypeRequest;
 import br.com.jackson.vo.TypeSpeedup;
 
 @Service
@@ -55,6 +57,10 @@ public class MainService {
 
 		if (requestVO != null) {
 			if (requestVO.getNext() != null && !requestVO.getNext().isEmpty()) {
+
+				if (requestVO.getType() == TypeRequest.ASYNC) {
+					ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(10);
+				}
 
 				List<Callable<Void>> callables = requestVO.getNext()
 														  	.stream()

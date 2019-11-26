@@ -18,6 +18,8 @@ public class RequestVO {
 
 	private Speedup speedup;
 
+	private TypeRequest type;
+
 	private Set<RequestVO> next;
 
 }
