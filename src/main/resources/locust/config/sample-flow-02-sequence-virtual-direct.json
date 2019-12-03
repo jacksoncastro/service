@@ -1,0 +1,77 @@
+[
+    {
+        "url": "/service01/api",
+        "name": "Flow 01",
+        "data": {
+            "average": 1000,
+            "deviation": 10,
+            "speedup": {
+            	"type": "VIRTUAL_DIRECT",
+            	"value": "20"
+            },
+            "next": [
+            	{
+                    "service": "http://service02.default:8080/api",
+                    "average":2000,
+                    "deviation": 10,
+		            "speedup": {
+		            	"type": "VIRTUAL_DIRECT",
+		            	"value": "20"
+		            }
+                },
+                {
+                    "service": "http://service03.default:8080/api",
+                    "average":3000,
+                    "deviation": 10,
+		            "speedup": {
+		            	"type": "VIRTUAL_DIRECT",
+		            	"value": "20"
+		            }
+                },
+                {
+                    "service": "http://service04.default:8080/api",
+                    "average":4000,
+                    "deviation": 10
+                }
+            ]
+        }
+    },
+    {
+        "url": "/service02/api",
+        "name": "Flow 02",
+        "data": {
+            "average": 2000,
+            "deviation": 10,
+            "speedup": {
+            	"type": "VIRTUAL_DIRECT",
+            	"value": "20"
+            },
+            "next": [
+                {
+                    "service": "http://service04.default:8080/api",
+                    "average": 4000,
+                    "deviation": 10
+                }
+            ]
+        }
+    },
+    {
+        "url": "/service03/api",
+        "name": "Flow 03",
+        "data": {
+            "average": 3000,
+            "deviation": 10,
+            "speedup": {
+            	"type": "VIRTUAL_DIRECT",
+            	"value": "20"
+            },
+            "next": [
+                {
+                    "service": "http://service04.default:8080/api",
+                    "average": 4000,
+                    "deviation": 10
+                }
+            ]
+        }
+    }
+]
