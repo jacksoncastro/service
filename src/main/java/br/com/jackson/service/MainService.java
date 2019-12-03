@@ -8,30 +8,29 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.uncommons.maths.random.GaussianGenerator;
 
-import br.com.jackson.controller.MainController;
 import br.com.jackson.vo.RequestVO;
 import br.com.jackson.vo.Speedup;
 import br.com.jackson.vo.TypeRequest;
 import br.com.jackson.vo.TypeSpeedup;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class MainService {
-
-	private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
 	private static final int DEFAULT_AVERAGE = 0;
 
 	private static final int DEFAULT_DEVIATION = 20;
 
 	private static final double ONE_HUNDRED = 100d;
+
+	private static final int ONE = 1;
 
 	private static final double ZERO = 0;
 
@@ -40,9 +39,6 @@ public class MainService {
 
 	@Autowired
 	private Random random;
-
-	@Autowired
-	private ExecutorService executorService;
 
 
 	/**
@@ -58,9 +54,8 @@ public class MainService {
 		if (requestVO != null) {
 			if (requestVO.getNext() != null && !requestVO.getNext().isEmpty()) {
 
-				if (requestVO.getType() == TypeRequest.ASYNC) {
-					ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(10);
-				}
+				int size = requestVO.getType() == TypeRequest.PARALLEL ? requestVO.getNext().size() : ONE;
+				ExecutorService executorService = Executors.newFixedThreadPool(size);
 
 				List<Callable<Void>> callables = requestVO.getNext()
 														  	.stream()
@@ -68,14 +63,12 @@ public class MainService {
 														  	.collect(Collectors.toList());
 
 				try {
-					this.executorService.invokeAll(callables);
+					executorService.invokeAll(callables);
 				} catch (InterruptedException e) {
 					throw new RuntimeException("Error to invoke all.", e);
 				}
 			}
-			long sleep = calculateSleep(requestVO);
-			log.trace("Sleeping {} milliseconds", sleep);
-			sleep(sleep);
+			sleep(calculateSleep(requestVO));
 		}
 	}
 

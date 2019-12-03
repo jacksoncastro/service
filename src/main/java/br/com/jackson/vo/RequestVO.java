@@ -1,6 +1,6 @@
 package br.com.jackson.vo;
 
-import java.util.Set;
+import java.util.List;
 
 import lombok.Data;
 
@@ -20,6 +20,6 @@ public class RequestVO {
 
 	private TypeRequest type;
 
-	private Set<RequestVO> next;
+	private List<RequestVO> next;
 
 }
