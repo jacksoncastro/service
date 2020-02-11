@@ -19,10 +19,84 @@ metadata:
   name: service01
 spec:
   hosts:
-  - "*"
+    - "*"
   gateways:
   - service-gateway
   http:
-  - route:
-    - destination:
-        host: service01
+    - match:
+      - uri:
+          prefix: /service01
+      rewrite:
+          uri: "/"
+      route:
+      - destination:
+          port:
+            number: 8080
+          host: service01
+      fault:
+        delay:
+          percent: 100
+          fixedDelay: 5s
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: service02
+spec:
+  hosts:
+    - "*"
+  gateways:
+  - service-gateway
+  http:
+    - match:
+      - uri:
+          prefix: /service02
+      rewrite:
+          uri: "/"
+      route:
+      - destination:
+          port:
+            number: 8080
+          host: service02
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: service03
+spec:
+  hosts:
+    - "*"
+  gateways:
+  - service-gateway
+  http:
+    - match:
+      - uri:
+          prefix: /service03
+      rewrite:
+          uri: "/"
+      route:
+      - destination:
+          port:
+            number: 8080
+          host: service03
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: service04
+spec:
+  hosts:
+    - "*"
+  gateways:
+  - service-gateway
+  http:
+    - match:
+      - uri:
+          prefix: /service04
+      rewrite:
+          uri: "/"
+      route:
+      - destination:
+          port:
+            number: 8080
+          host: service04
