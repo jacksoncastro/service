@@ -1,23 +1,16 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: service01
+  name: service01-internal
 spec:
   hosts:
-    - "*"
-  gateways:
-    - service-gateway
+    - "service01"
   http:
     - route:
         - destination:
             port:
               number: 8080
             host: service01
-      match:
-      - uri:
-          prefix: /service01
-      rewrite:
-          uri: "/"
       # fault:
       #   delay:
       #     percent: 100
@@ -26,23 +19,16 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: service02
+  name: service02-internal
 spec:
   hosts:
-    - "*"
-  gateways:
-    - service-gateway
+    - "service02"
   http:
     - route:
         - destination:
             port:
               number: 8080
             host: service02
-      match:
-      - uri:
-          prefix: /service02
-      rewrite:
-          uri: "/"
       # fault:
       #   delay:
       #     percent: 100
@@ -51,23 +37,16 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: service03
+  name: service03-internal
 spec:
   hosts:
-    - "*"
-  gateways:
-    - service-gateway
+    - "service03"
   http:
     - route:
         - destination:
             port:
               number: 8080
             host: service03
-      match:
-      - uri:
-          prefix: /service03
-      rewrite:
-          uri: "/"
       # fault:
       #   delay:
       #     percent: 100
@@ -76,23 +55,16 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: service04
+  name: service04-internal
 spec:
   hosts:
-    - "*"
-  gateways:
-    - service-gateway
+    - "service04"
   http:
     - route:
         - destination:
             port:
               number: 8080
             host: service04
-      match:
-      - uri:
-          prefix: /service04
-      rewrite:
-          uri: "/"
       # fault:
       #   delay:
       #     percent: 100
