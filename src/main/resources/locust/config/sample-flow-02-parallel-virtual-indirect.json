@@ -6,16 +6,28 @@
             "average": 1000,
             "deviation": 10,
             "type": "PARALLEL",
+            "speedup": {
+            	"type": "VIRTUAL_DIRECT",
+            	"value": "20"
+            },
             "next": [
             	{
                     "service": "http://service02.default:8080/api",
                     "average":2000,
-                    "deviation": 10
+                    "deviation": 10,
+		            "speedup": {
+		            	"type": "VIRTUAL_DIRECT",
+		            	"value": "20"
+		            }
                 },
                 {
                     "service": "http://service03.default:8080/api",
                     "average":3000,
-                    "deviation": 10
+                    "deviation": 10,
+		            "speedup": {
+		            	"type": "VIRTUAL_DIRECT",
+		            	"value": "20"
+		            }
                 },
                 {
                     "service": "http://service04.default:8080/api",
@@ -31,6 +43,10 @@
         "data": {
             "average": 2000,
             "deviation": 10,
+            "speedup": {
+            	"type": "VIRTUAL_DIRECT",
+            	"value": "20"
+            },
             "next": [
                 {
                     "service": "http://service04.default:8080/api",
@@ -46,6 +62,10 @@
         "data": {
             "average": 3000,
             "deviation": 10,
+            "speedup": {
+            	"type": "VIRTUAL_DIRECT",
+            	"value": "20"
+            },
             "next": [
                 {
                     "service": "http://service04.default:8080/api",

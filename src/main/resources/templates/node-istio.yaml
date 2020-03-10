@@ -1,19 +1,4 @@
 apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: service-gateway
-spec:
-  selector:
-    istio: ingressgateway 
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*"
----
-apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: service01
@@ -21,22 +6,22 @@ spec:
   hosts:
     - "*"
   gateways:
-  - service-gateway
+    - service-gateway
   http:
-    - match:
+    - route:
+        - destination:
+            port:
+              number: 8080
+            host: service01
+      match:
       - uri:
           prefix: /service01
       rewrite:
           uri: "/"
-      route:
-      - destination:
-          port:
-            number: 8080
-          host: service01
-      fault:
-        delay:
-          percent: 100
-          fixedDelay: 5s
+      # fault:
+      #   delay:
+      #     percent: 100
+      #     fixedDelay: 5s
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -46,18 +31,22 @@ spec:
   hosts:
     - "*"
   gateways:
-  - service-gateway
+    - service-gateway
   http:
-    - match:
+    - route:
+        - destination:
+            port:
+              number: 8080
+            host: service02
+      match:
       - uri:
           prefix: /service02
       rewrite:
           uri: "/"
-      route:
-      - destination:
-          port:
-            number: 8080
-          host: service02
+      # fault:
+      #   delay:
+      #     percent: 100
+      #     fixedDelay: 5s
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -67,18 +56,22 @@ spec:
   hosts:
     - "*"
   gateways:
-  - service-gateway
+    - service-gateway
   http:
-    - match:
+    - route:
+        - destination:
+            port:
+              number: 8080
+            host: service03
+      match:
       - uri:
           prefix: /service03
       rewrite:
           uri: "/"
-      route:
-      - destination:
-          port:
-            number: 8080
-          host: service03
+      # fault:
+      #   delay:
+      #     percent: 100
+      #     fixedDelay: 5s
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -86,17 +79,14 @@ metadata:
   name: service04
 spec:
   hosts:
-    - "*"
-  gateways:
-  - service-gateway
+    - "service04"
   http:
-    - match:
-      - uri:
-          prefix: /service04
-      rewrite:
-          uri: "/"
-      route:
-      - destination:
-          port:
-            number: 8080
-          host: service04
+    - route:
+        - destination:
+            port:
+              number: 8080
+            host: service04
+      # fault:
+      #   delay:
+      #     percent: 100
+      #     fixedDelay: 5s

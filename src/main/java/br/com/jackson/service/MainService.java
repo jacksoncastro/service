@@ -130,6 +130,7 @@ public class MainService {
 		return () -> {
 			// request next service
 			RestTemplate restTemplate = getRestTemplate(timeout);
+			log.trace("Requisitando url {}", url);
 			restTemplate.postForEntity(url, data, String.class);
 			return null;
 		};
@@ -262,9 +263,8 @@ public class MainService {
 		int average = request.getAverage();
 		int deviation = request.getDeviation();
 		double value = request.getSpeedup().getValue();
-		double percent = getPercent(average, value);
 
-		double subtract = average - percent;
+		double subtract = average - value;
 
 		return getNormalDistribution(subtract, deviation);
 	}
@@ -283,9 +283,8 @@ public class MainService {
 		int average = request.getAverage();
 		int deviation = request.getDeviation();
 		double value = request.getSpeedup().getValue();
-		double percent = getPercent(average, value);
 
-		double plus = average + percent;
+		double plus = average + value;
 
 		return getNormalDistribution(plus, deviation);
 	}
@@ -307,8 +306,7 @@ public class MainService {
 		int distribution = (int) getNormalDistribution(average, deviation);
 
 		double value = request.getSpeedup().getValue();
-		double percent = getPercent(average, value);
 
-		return (long) (distribution + percent);
+		return (long) (distribution + value);
 	}
 }

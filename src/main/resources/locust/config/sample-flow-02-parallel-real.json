@@ -23,7 +23,7 @@
                     "deviation": 10,
                     "speedup": {
                     	"type": "REAL",
-                    	"value": "20"
+                    	"value": "800"
                     }
                 }
             ]
@@ -42,7 +42,7 @@
                     "deviation": 10,
                     "speedup": {
                     	"type": "REAL",
-                    	"value": "20"
+                    	"value": "800"
                     }
                 }
             ]
@@ -61,7 +61,7 @@
                     "deviation": 10,
                     "speedup": {
                     	"type": "REAL",
-                    	"value": "20"
+                    	"value": "800"
                     }
                 }
             ]

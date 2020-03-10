@@ -34,7 +34,9 @@ spec:
   selector:
     app: service01
   ports:
-  - port: 8080
+  - name: http
+    protocol: TCP
+    port: 8080
     targetPort: 8080
 ---
 ### Service 02
@@ -73,7 +75,9 @@ spec:
   selector:
     app: service02
   ports:
-  - port: 8080
+  - name: http
+    protocol: TCP
+    port: 8080
     targetPort: 8080
 ---
 ### Service 03
@@ -112,7 +116,9 @@ spec:
   selector:
     app: service03
   ports:
-  - port: 8080
+  - name: http
+    protocol: TCP
+    port: 8080
     targetPort: 8080
 ---
 ### Service 04
@@ -151,7 +157,9 @@ spec:
   selector:
     app: service04
   ports:
-  - port: 8080
+  - name: http
+    protocol: TCP
+    port: 8080
     targetPort: 8080
 #---
 #apiVersion: monitoring.coreos.com/v1
