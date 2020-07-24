@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scripts-cm
+data:
+  request.json: |
+    [
+      {
+          "url": "/service01/api",
+          "name": "Flow 01",
+          "data": {
+              "average": 1000,
+              "deviation": 10,
+              "next": [
+                  {
+                      "service": "http://service04.default:8080/api",
+                      "average":4000,
+                      "deviation": 10
+                  }
+              ]
+          }
+      },
+      {
+          "url": "/service02/api",
+          "name": "Flow 02",
+          "data": {
+              "average": 2000,
+              "deviation": 10,
+              "next": [
+                  {
+                      "service": "http://service04.default:8080/api",
+                      "average": 4000,
+                      "deviation": 10
+                  }
+              ]
+          }
+      },
+      {
+          "url": "/service03/api",
+          "name": "Flow 03",
+          "data": {
+              "average": 3000,
+              "deviation": 10,
+              "next": [
+                  {
+                      "service": "http://service04.default:8080/api",
+                      "average": 4000,
+                      "deviation": 10
+                  }
+              ]
+          }
+      }
+    ]
+  locustfile.py: |
+    from locust import HttpLocust, TaskSet, task, between
+    import json
+
+    class RestTasks(TaskSet):
+
+        @task
+        def index(self):
+            speedup_request = open('request.json').read()
+            json_request = json.loads(speedup_request)
+            headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
+            for request in json_request:
+              self.client.post(request['url'], data=json.dumps(request['data']),
+              headers=headers,
+              name = request['name'])
+
+    class WebsiteUser(HttpLocust):
+        task_set = RestTasks
+        wait_time = between(5, 15)

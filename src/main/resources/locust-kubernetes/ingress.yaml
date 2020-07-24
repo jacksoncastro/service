@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: locust
+spec:
+  rules:
+  - host: locust.local.com
+    http:
+      paths:
+      - backend:
+          serviceName: locust-service
+          servicePort: 8089
+        path: /

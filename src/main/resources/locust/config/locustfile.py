@@ -1,4 +1,4 @@
-from locust import HttpLocust, TaskSet, task
+from locust import HttpLocust, TaskSet, task, between
 import json
 
 class RestTasks(TaskSet):
@@ -15,3 +15,4 @@ class RestTasks(TaskSet):
 
 class WebsiteUser(HttpLocust):
     task_set = RestTasks
+    wait_time = between(5, 15)

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: locust
+  # não me pergunte porque, mas se colocar somente locust ou locust-master
+  # ele monta o valor da porta com o nome do host e se embanana todo
+  name: locust-service
+spec:
+  ports:
+  - port: 8089
+    targetPort: 8089
+    name: web-port
+  selector:
+    app: locust
